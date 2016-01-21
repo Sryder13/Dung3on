@@ -12,6 +12,11 @@ set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 # location of all the source files
 set (SOURCE_FILES_DIR ${PROJECT_BINARY_DIR}/src)
 
+# list of source files
+set (SOURCE_FILES
+	"${SOURCE_FILES_DIR}/main.cpp"
+	)
+
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
@@ -24,4 +29,4 @@ configure_file (
 include_directories("${SOURCE_FILES_DIR}")
 
 # add the executable
-add_executable (dung3on "${SOURCE_FILES_DIR}/main.cpp")
+add_executable (dung3on ${SOURCE_FILES})
