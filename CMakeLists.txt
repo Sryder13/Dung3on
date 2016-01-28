@@ -9,6 +9,9 @@ set (CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
+# cmake modules
+set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
 # location of all the source files
 set (SOURCE_FILES_DIR ${PROJECT_BINARY_DIR}/src)
 
@@ -16,6 +19,14 @@ set (SOURCE_FILES_DIR ${PROJECT_BINARY_DIR}/src)
 set (SOURCE_FILES
 	"${SOURCE_FILES_DIR}/main.cpp"
 	)
+
+#include SDL2
+find_package (SDL2 REQUIRED)
+include_directories (${SDL2_INCLUDE_DIR})
+
+#include SDL2_Image
+find_package (SDL2_image REQUIRED)
+include_directories (${SDL2_IMAGE_INCLUDE_DIR})
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -30,3 +41,5 @@ include_directories("${SOURCE_FILES_DIR}")
 
 # add the executable
 add_executable (dung3on ${SOURCE_FILES})
+target_link_libraries(dung3on ${SDL2_LIBRARY})
+target_link_libraries(dung3on ${SDL2_IMAGE_LIBRARY})
