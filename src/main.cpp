@@ -40,6 +40,17 @@ int main(int argc, char *argv[])
 				{
 					running = false;
 				}
+				else if (event.type == SDL_KEYDOWN)
+				{
+					switch(event.key.keysym.sym)
+					{
+						case SDLK_ESCAPE:
+							running = false;
+							break;
+						default:
+							break;
+					}
+				}
 			}
 		}
 	}

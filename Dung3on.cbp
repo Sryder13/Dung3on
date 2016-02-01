@@ -28,7 +28,9 @@
 		</Compiler>
 		<Unit filename="src/main.cpp" />
 		<Extensions>
-			<code_completion />
+			<code_completion>
+				<search_path add="../../../../usr/include/SDL2" />
+			</code_completion>
 			<debugger />
 		</Extensions>
 	</Project>
