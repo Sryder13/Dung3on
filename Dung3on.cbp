@@ -14,6 +14,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="src" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -27,6 +28,8 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/md2.cpp" />
+		<Unit filename="src/md2.hpp" />
 		<Extensions>
 			<code_completion>
 				<search_path add="../../../../usr/include/SDL2" />
