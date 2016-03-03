@@ -18,6 +18,7 @@ set (SOURCE_FILES_DIR ${PROJECT_BINARY_DIR}/src)
 # list of source files
 set (SOURCE_FILES
 	"${SOURCE_FILES_DIR}/main.cpp"
+	"${SOURCE_FILES_DIR}/md2.cpp"
 	)
 
 # include OpenGL

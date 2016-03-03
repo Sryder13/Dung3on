@@ -1,70 +1,100 @@
 #ifndef MD2_H
 #define MD2_H
 
-struct vec3
+#include<SDL_opengl.h>
+
+typedef float vec3[3];
+
+struct md2_header
 {
-	float x;
-	float y;
-	float z;
+	int ident; // Magic number: "IDP2"
+	int version; // Version: must be 8
+
+	int skinWidth; // Texture width
+	int skinHeight; // Texture height
+
+	int frameSize; // Size in bytes of a frame
+
+	int num_skins; // Number of skins
+	int num_vertices; // Number of vertices per frame
+	int num_texCoords; // Number of texture coordinates
+	int num_triangles; // Number of triangles
+	int num_glcmds; // Number of opengl commands
+	int num_frames; // Number of frames
+
+	int offset_skins; // Offset of skin data
+	int offset_texCoords; // Offset of texture coordinate data
+	int offset_triangles; // Offset triangle data
+	int offset_frames; // Offset frame data
+	int offset_glcmds; // Offset OpenGL command data
+	int offset_end; // Offset end of file
 };
 
-struct vertex
+struct md2_skin
 {
-	unsigned char v[3];
-	unsigned char lightNormalIndex;
+	char name[64]; // name of the texture
 };
 
-struct texcoord
+struct md2_texCoord
 {
-	short s;
-	short t;
+	short s; // texture x co-ordinate
+	short t; // texture y co-ordinate
 };
 
-struct frame
+struct md2_triangle
 {
-	vec3 scale;
-	vec3 translate;
-	char name[16];
-	vertex vert;
+	unsigned short vertex[3]; //index of the vertex
+	unsigned short texCoord[3]; // index of texture co-ordinate
+};
+
+struct md2_vertex
+{
+	unsigned char vertex[3]; // xyz position of vertex
+	unsigned char lightNormalIndex; // normal index
+};
+
+struct md2_frame
+{
+	~md2_frame() {
+		delete [] vertices;
+	}
+
+	vec3 scale; // xyz scale of frame
+	vec3 translate; // xyz translation of frame
+	char name[16]; // frame name
+	md2_vertex *vertices; // frame vertex array
+};
+
+struct md2_glcmd
+{
+	int index; // vertex index
+	float s; // x texture co-ordinate
+	float t; // y texture co-ordinate
 };
 
 class md2
 {
 	public:
-		md2();
+		md2(const std::string &filename);
 		virtual ~md2();
+
+		void renderFrame(int frame);
+		void setScale(float scale) {this->scale = scale;}
 	protected:
 	private:
-	md2_header header;
-};
+		static vec3 normalTable[162];
+		static int md2Ident;
+		static int md2Version;
 
-class md2_header
-{
-	public:
-		md2_header();
-	protected:
-	private:
-		int ident;                  /* magic number: "IDP2" */
-		int version;                /* version: must be 8 */
+		// Model data
+		md2_header header;
+		md2_skin *skins;
+		md2_texCoord *texCoords;
+		md2_triangle *triangles;
+		md2_frame *frames;
+		int *glcmds;
 
-		int skinwidth;              /* texture width */
-		int skinheight;             /* texture height */
-
-		int framesize;              /* size in bytes of a frame */
-
-		int num_skins;              /* number of skins */
-		int num_vertices;           /* number of vertices per frame */
-		int num_st;                 /* number of texture coordinates */
-		int num_tris;               /* number of triangles */
-		int num_glcmds;             /* number of opengl commands */
-		int num_frames;             /* number of frames */
-
-		int offset_skins;           /* offset skin data */
-		int offset_st;              /* offset texture coordinate data */
-		int offset_tris;            /* offset triangle data */
-		int offset_frames;          /* offset frame data */
-		int offset_glcmds;          /* offset OpenGL command data */
-		int offset_end;             /* offset end of file */
+		float scale;
 };
 
 #endif // MD2_H

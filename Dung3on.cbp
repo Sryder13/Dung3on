@@ -20,7 +20,7 @@
 					<Add option="-s" />
 				</Linker>
 				<ExtraCommands>
-					<Add before="cmake ./" />
+					<Add before="cmake ./ -DCMAKE_BUILD_TYPE=Debug" />
 				</ExtraCommands>
 			</Target>
 		</Build>

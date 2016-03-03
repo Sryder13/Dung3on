@@ -4,6 +4,8 @@
 #include<SDL_opengl.h>
 #include "config.hpp"
 
+#include "md2.hpp"
+
 // TODO (sean): Create settings to change screen resolution instead of defines
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -173,12 +175,8 @@ void render()
 	// Clear screen before rendering next frame
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// TODO (sean): This is obviously deprecated, proper rendering should be done
-	glBegin(GL_TRIANGLES);
-		glVertex2f( -0.5f, -0.5f );
-		glVertex2f( 0.5f, -0.5f );
-		glVertex2f( 0.0f, 0.5f );
-	glEnd();
+	md2 testModel("./asset/model/player_test.md2");
+	testModel.renderFrame(0);
 }
 
 void close()
