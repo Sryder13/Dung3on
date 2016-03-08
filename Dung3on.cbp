@@ -27,9 +27,12 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="src/game.cpp" />
+		<Unit filename="src/game.hpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/md2.cpp" />
 		<Unit filename="src/md2.hpp" />
+		<Unit filename="src/texture.hpp" />
 		<Extensions>
 			<code_completion>
 				<search_path add="../../../../usr/include/SDL2" />

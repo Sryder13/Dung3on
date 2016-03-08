@@ -1,7 +1,9 @@
 #ifndef MD2_H
 #define MD2_H
 
+#include<GL/glew.h>
 #include<SDL_opengl.h>
+#include<SDL_image.h>
 
 typedef float vec3[3];
 
@@ -80,6 +82,8 @@ class md2
 
 		void renderFrame(int frame);
 		void setScale(float scale) {this->scale = scale;}
+
+		GLuint loadTexture(const std::string &filename);
 	protected:
 	private:
 		static vec3 normalTable[162];

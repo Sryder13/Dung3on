@@ -19,6 +19,7 @@ set (SOURCE_FILES_DIR ${PROJECT_BINARY_DIR}/src)
 set (SOURCE_FILES
 	"${SOURCE_FILES_DIR}/main.cpp"
 	"${SOURCE_FILES_DIR}/md2.cpp"
+	"${SOURCE_FILES_DIR}/game.cpp"
 	)
 
 # include OpenGL
@@ -33,6 +34,10 @@ include_directories (${GLEW_INCLUDE_DIRS})
 find_package (SDL2 REQUIRED)
 include_directories (${SDL2_INCLUDE_DIR})
 
+# include SDL2 image
+find_package (SDL2_image REQUIRED)
+include_directories (${SDL2_IMAGE_INCLUDE_DIR})
+
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
@@ -46,4 +51,4 @@ include_directories("${SOURCE_FILES_DIR}")
 
 # add the executable
 add_executable (dung3on ${SOURCE_FILES})
-target_link_libraries(dung3on ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${SDL2_LIBRARY})
+target_link_libraries(dung3on ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})

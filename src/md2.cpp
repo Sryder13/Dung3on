@@ -229,11 +229,37 @@ md2::md2(const std::string &filename)
 
 void md2::renderFrame(int frame)
 {
+	// TODO (sean): Use Vertex Arrays for drawing instead of old glBegin/glEnd
+
+	// store old matrix (we need to store the old matrix and bring it back because MD2s are rotated oddly
+	glPushMatrix();
+
+	// reverse orientation of front facing polygons
+	glPushAttrib(GL_POLYGON_BIT);
+	glFrontFace(GL_CW);
+
     if (frame < 0 || frame > header.num_frames)
 		return;
 
 	int i;
 	int *pGlcmds = glcmds; // pointer to glcmds so we don't change original pointer
+	GLfloat lightPos[] = {0.0f, 1.0f, 0.0f, 0.0f}; // light position
+	GLfloat diffuseColour[] = {1.0f, 1.0f, 1.0f, 1.0f}; // diffuse light colour
+	GLfloat ambientColour[] = {1.0f, 1.0f, 1.0f, 1.0f}; // ambient light colour
+	GLuint textureID;
+
+	// TODO (sean): Remove translate, it's just for testing
+	glTranslatef(0.0f, -0.2f, -5.0f);
+
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseColour);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientColour);
+
+	glRotatef(0.05f * SDL_GetTicks(), 0.0f, 1.0f, 0.0f);
+
+	//glScalef(0.3f, 0.3f, 0.3f);
+
+	textureID = loadTexture("./asset/texture/player_test.png");
 
     while ((i = *(pGlcmds++)) != 0)
     {
@@ -260,15 +286,72 @@ void md2::renderFrame(int frame)
 			// Send texture co-ordinates
 			glTexCoord2f(pGlcmd->s, 1.0f - pGlcmd->t);
 
+			// Use the normals from the precalculated table
+			glNormal3fv(normalTable[pVert->lightNormalIndex]);
+
 			vec3 vertex;
 			vertex[0] = (pFrame->scale[0] * pVert->vertex[0] + pFrame->translate[0]) * scale;
-			vertex[1] = (pFrame->scale[1] * pVert->vertex[1] + pFrame->translate[1]) * scale;
-			vertex[2] = (pFrame->scale[2] * pVert->vertex[2] + pFrame->translate[2]) * scale;
+			vertex[1] = (pFrame->scale[2] * pVert->vertex[2] + pFrame->translate[2]) * scale;
+			vertex[2] = -1 * (pFrame->scale[1] * pVert->vertex[1] + pFrame->translate[1]) * scale;
 
 			glVertex3fv(vertex);
 		}
 		glEnd();
     }
+    glDeleteTextures(1, &textureID);
+
+    glPopAttrib(); // GL_POLYGON_BIT
+    glPopMatrix();
+}
+
+GLuint md2::loadTexture(const std::string &filename)
+{
+	SDL_Surface *surface;
+	GLuint textureId;
+	GLuint mode;
+
+	surface = IMG_Load(filename.c_str());
+
+	if (!surface)
+		return 0;
+
+	if (surface->format->BytesPerPixel == 3)
+		mode = GL_RGB;
+	else if (surface->format->BytesPerPixel == 4)
+		mode = GL_RGBA;
+	else
+	{
+		SDL_FreeSurface(surface);
+	}
+
+	// Generate one texture name for use
+	glGenTextures(1, &textureId);
+
+	// We want to be using this texture
+	glBindTexture(GL_TEXTURE_2D, textureId);
+
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // filter when too small is linear
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // filter when magnified is nearest
+
+	if (GLEW_SGIS_generate_mipmap)
+	{
+		// Hardware mipmap generation
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+		glHint(GL_GENERATE_MIPMAP_HINT_SGIS, GL_NICEST);
+
+		// Put the texture into OpenGL
+		glTexImage2D(GL_TEXTURE_2D, 0, mode, surface->w, surface->h, 0, mode, GL_UNSIGNED_BYTE, surface->pixels);
+	}
+	else
+	{
+		// no hardware mipmaps so use gluBuild2DMupmaps
+		gluBuild2DMipmaps(GL_TEXTURE_2D, mode, surface->w, surface->h, mode, GL_UNSIGNED_BYTE, surface->pixels);
+	}
+
+	SDL_FreeSurface(surface); // no longer need the SDL surface
+
+    return textureId;
 }
 
 md2::~md2()
