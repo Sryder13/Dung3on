@@ -12,16 +12,16 @@
 class texture: public resource
 {
 	public:
-		texture();
-		virtual ~texture();
+		texture(); // constructor
+		virtual ~texture(); // destructor
 
-		bool load(const std::string &filename);
-		void bindTex() {glBindTexture(GL_TEXTURE_2D, textureId);}
+		bool load(const std::string &filename); // load texture
+		void bindTex() {glBindTexture(GL_TEXTURE_2D, textureId);} // set texture to use for gl
 
 		std::string getFilename() {return this->filename;}
 	protected:
 	private:
-		GLuint textureId;
+		GLuint textureId; // id of the texture
 		std::string filename;
 };
 

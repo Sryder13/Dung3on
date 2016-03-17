@@ -7,14 +7,15 @@ texture::texture()
 
 bool texture::load(const std::string &filename)
 {
-	SDL_Surface *surface;
-	GLuint mode;
+	SDL_Surface *surface; // SDL surface to temporarily store image
+	GLuint mode; // mode for image (GL_RGB or GL_RGBA)
 
-	surface = IMG_Load(filename.c_str());
+	surface = IMG_Load(filename.c_str()); // load image into surface
 
 	if (!surface)
 	{
-		std::cout << "texture::texture: Texture file not found" << std::endl;
+		std::cout << "texture::load: Texture file not found" << std::endl;
+		glBindTexture(GL_TEXTURE_2D, 0); // use default texture when could not load any
 		return false;
 	}
 
@@ -24,7 +25,7 @@ bool texture::load(const std::string &filename)
 		mode = GL_RGBA;
 	else
 	{
-		SDL_FreeSurface(surface);
+		SDL_FreeSurface(surface); // wrong format so don't use
 		return false;
 	}
 
@@ -51,7 +52,7 @@ bool texture::load(const std::string &filename)
 	}
 	else
 	{
-		// no hardware mipmaps so use gluBuild2DMupmaps
+		// no hardware mipmaps so use gluBuild2DMipmaps
 		gluBuild2DMipmaps(GL_TEXTURE_2D, mode, surface->w, surface->h, mode, GL_UNSIGNED_BYTE, surface->pixels);
 	}
 
@@ -61,5 +62,5 @@ bool texture::load(const std::string &filename)
 
 texture::~texture()
 {
-	glDeleteTextures(1, &textureId);
+	glDeleteTextures(1, &textureId); // only need to delete texture in GL
 }

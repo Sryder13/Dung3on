@@ -241,7 +241,7 @@ void md2::renderFrame(int frame)
 {
 	// TODO (sean): Use Vertex Arrays for drawing instead of old glBegin/glEnd
 
-	// store old matrix (we need to store the old matrix and bring it back because MD2s are rotated oddly
+	// store old matrix
 	glPushMatrix();
 
 	// reverse orientation of front facing polygons
@@ -261,13 +261,11 @@ void md2::renderFrame(int frame)
 	// TODO (sean): Remove translate, it's just for testing
 	glTranslatef(0.0f, -0.2f, -5.0f);
 
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseColour);
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos); // set light position
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseColour); // set light colours
 	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientColour);
 
 	glRotatef(0.05f * SDL_GetTicks(), 0.0f, 1.0f, 0.0f);
-
-	//glScalef(0.3f, 0.3f, 0.3f);
 
 	resourcemanager::getResourceManager()->getResource<texture>("./asset/texture/player_test.png")->bindTex();
 
@@ -308,7 +306,6 @@ void md2::renderFrame(int frame)
 		}
 		glEnd();
     }
-    glDeleteTextures(1, &textureID);
 
     glPopAttrib(); // GL_POLYGON_BIT
     glPopMatrix();

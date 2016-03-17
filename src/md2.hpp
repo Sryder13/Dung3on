@@ -9,7 +9,7 @@
 
 typedef float vec3[3];
 
-struct md2_header
+struct md2_header // header of the file
 {
 	int ident; // Magic number: "IDP2"
 	int version; // Version: must be 8

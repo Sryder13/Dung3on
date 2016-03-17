@@ -17,8 +17,8 @@ class game
 		game();
 		virtual ~game();
 
-		bool init();
-		bool initGL();
+		bool init(); // initialise window etc.
+		bool initGL(); // initialise GL
 		void swapWindow() {SDL_GL_SwapWindow(window);}
     protected:
     private:
