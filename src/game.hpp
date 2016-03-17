@@ -5,6 +5,8 @@
 #include<GL/glew.h>
 #include<SDL_opengl.h>
 
+#include "resourcemanager.hpp"
+
 // TODO (sean): Create settings to change screen resolution instead of defines
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480

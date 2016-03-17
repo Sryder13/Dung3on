@@ -15,6 +15,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="src" />
+					<Add directory="src/" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -32,6 +33,8 @@
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/md2.cpp" />
 		<Unit filename="src/md2.hpp" />
+		<Unit filename="src/resourcemanager.hpp" />
+		<Unit filename="src/texture.cpp" />
 		<Unit filename="src/texture.hpp" />
 		<Extensions>
 			<code_completion>

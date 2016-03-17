@@ -173,7 +173,17 @@ int md2::md2Ident = 'I' + ('D'<<8) + ('P'<<16) + ('2'<<24);
 int md2::md2Version = 8;
 
 // Constructor loads the model
-md2::md2(const std::string &filename)
+md2::md2()
+{
+	skins = NULL;
+	texCoords = NULL;
+	triangles = NULL;
+	frames = NULL;
+	glcmds = NULL;
+	scale = 1.0f;
+}
+
+void md2::load(const std::string &filename)
 {
 	std::ifstream file(filename.c_str(), std::ios::binary);
 
@@ -259,7 +269,7 @@ void md2::renderFrame(int frame)
 
 	//glScalef(0.3f, 0.3f, 0.3f);
 
-	textureID = loadTexture("./asset/texture/player_test.png");
+	resourcemanager::getResourceManager()->getResource<texture>("./asset/texture/player_test.png")->bindTex();
 
     while ((i = *(pGlcmds++)) != 0)
     {
@@ -302,56 +312,6 @@ void md2::renderFrame(int frame)
 
     glPopAttrib(); // GL_POLYGON_BIT
     glPopMatrix();
-}
-
-GLuint md2::loadTexture(const std::string &filename)
-{
-	SDL_Surface *surface;
-	GLuint textureId;
-	GLuint mode;
-
-	surface = IMG_Load(filename.c_str());
-
-	if (!surface)
-		return 0;
-
-	if (surface->format->BytesPerPixel == 3)
-		mode = GL_RGB;
-	else if (surface->format->BytesPerPixel == 4)
-		mode = GL_RGBA;
-	else
-	{
-		SDL_FreeSurface(surface);
-	}
-
-	// Generate one texture name for use
-	glGenTextures(1, &textureId);
-
-	// We want to be using this texture
-	glBindTexture(GL_TEXTURE_2D, textureId);
-
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // filter when too small is linear
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // filter when magnified is nearest
-
-	if (GLEW_SGIS_generate_mipmap)
-	{
-		// Hardware mipmap generation
-		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
-		glHint(GL_GENERATE_MIPMAP_HINT_SGIS, GL_NICEST);
-
-		// Put the texture into OpenGL
-		glTexImage2D(GL_TEXTURE_2D, 0, mode, surface->w, surface->h, 0, mode, GL_UNSIGNED_BYTE, surface->pixels);
-	}
-	else
-	{
-		// no hardware mipmaps so use gluBuild2DMupmaps
-		gluBuild2DMipmaps(GL_TEXTURE_2D, mode, surface->w, surface->h, mode, GL_UNSIGNED_BYTE, surface->pixels);
-	}
-
-	SDL_FreeSurface(surface); // no longer need the SDL surface
-
-    return textureId;
 }
 
 md2::~md2()

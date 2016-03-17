@@ -20,6 +20,7 @@ set (SOURCE_FILES
 	"${SOURCE_FILES_DIR}/main.cpp"
 	"${SOURCE_FILES_DIR}/md2.cpp"
 	"${SOURCE_FILES_DIR}/game.cpp"
+	"${SOURCE_FILES_DIR}/texture.cpp"
 	)
 
 # include OpenGL

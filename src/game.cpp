@@ -118,6 +118,8 @@ game::~game()
 	window = NULL;
 	context = NULL;
 
+	resourcemanager::getResourceManager()->clearResources();
+
 	//Quit SDL subsystems
 	SDL_Quit();
 }

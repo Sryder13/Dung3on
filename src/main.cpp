@@ -2,10 +2,12 @@
 #include<SDL.h>
 #include<GL/glew.h>
 #include<SDL_opengl.h>
+
 #include "config.hpp"
 
 #include "game.hpp"
 #include "md2.hpp"
+#include "resourcemanager.hpp"
 
 void render(); // Render the screen
 
@@ -68,6 +70,7 @@ void render()
 	// Clear screen before rendering next frame
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-	md2 testModel("./asset/model/sphere_test.md2");
-	testModel.renderFrame(0);
+	md2 *testModel = resourcemanager::getResourceManager()->getResource<md2>("./asset/model/sphere_test.md2");
+
+	testModel->renderFrame(0);
 }

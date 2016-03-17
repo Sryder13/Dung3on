@@ -3,7 +3,9 @@
 
 #include<GL/glew.h>
 #include<SDL_opengl.h>
-#include<SDL_image.h>
+
+#include "resourcemanager.hpp"
+#include "texture.hpp"
 
 typedef float vec3[3];
 
@@ -74,16 +76,17 @@ struct md2_glcmd
 	float t; // y texture co-ordinate
 };
 
-class md2
+class md2: public resource
 {
 	public:
-		md2(const std::string &filename);
+		md2();
 		virtual ~md2();
 
+		void load(const std::string &filename);
 		void renderFrame(int frame);
 		void setScale(float scale) {this->scale = scale;}
 
-		GLuint loadTexture(const std::string &filename);
+		std::string getFilename() {return this->filename;}
 	protected:
 	private:
 		static vec3 normalTable[162];
@@ -99,6 +102,8 @@ class md2
 		int *glcmds;
 
 		float scale;
+
+		std::string filename;
 };
 
 #endif // MD2_H
