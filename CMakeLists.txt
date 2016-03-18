@@ -22,6 +22,7 @@ set (SOURCE_FILES
 	"${SOURCE_FILES_DIR}/game.cpp"
 	"${SOURCE_FILES_DIR}/texture.cpp"
 	"${SOURCE_FILES_DIR}/resourcemanager.cpp"
+	"${SOURCE_FILES_DIR}/gamemap.cpp"
 	)
 
 # include OpenGL

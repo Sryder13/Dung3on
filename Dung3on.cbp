@@ -30,6 +30,8 @@
 		</Compiler>
 		<Unit filename="src/game.cpp" />
 		<Unit filename="src/game.hpp" />
+		<Unit filename="src/gamemap.cpp" />
+		<Unit filename="src/gamemap.hpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/md2.cpp" />
 		<Unit filename="src/md2.hpp" />
