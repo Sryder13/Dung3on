@@ -75,11 +75,11 @@ void gamemap::setTilesModels()
 					// TODO (sean): determine tile rotation based on where walls are
 
 					if (numSurroundingWalls == 0)
-						modelFile = "./asset/model/tile_1.md2"; // TODO (sean): A no walls floor model
+						modelFile = "./asset/model/tile_0.md2";
 					else if (numSurroundingWalls == 1)
 						modelFile = "./asset/model/tile_1.md2";
 					else if (numSurroundingWalls == 2)
-						modelFile = "./asset/model/tile_2.md2"; // TODO (sean): Fix this, there needs to be a corner walls version
+						modelFile = "./asset/model/tile_2.md2"; // TODO (sean): Fix this, I need to account for corridors
 					else if (numSurroundingWalls == 3)
 						modelFile = "./asset/model/tile_3.md2";
 					else if (numSurroundingWalls == 4)
@@ -87,8 +87,7 @@ void gamemap::setTilesModels()
 				}
 					break;
 				case TILE_WALL:
-					// TODO (sean): An actual wall model
-					modelFile = "./asset/model/sphere_test.md2";
+					modelFile = "./asset/model/tile_wall.md2";
 					break;
 				case TILE_STAIRS:
 					modelFile = "./asset/model/tile_stairs.md2";
