@@ -33,6 +33,7 @@
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/md2.cpp" />
 		<Unit filename="src/md2.hpp" />
+		<Unit filename="src/resourcemanager.cpp" />
 		<Unit filename="src/resourcemanager.hpp" />
 		<Unit filename="src/texture.cpp" />
 		<Unit filename="src/texture.hpp" />

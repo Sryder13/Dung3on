@@ -20,8 +20,8 @@ class resourcemanager
 		static resourcemanager *getResourceManager() {static resourcemanager rManager; return &rManager;}
 
 		// templated so we distinguish between different resources when loading
-		template <class T>
-		T *getResource(const std::string &filename)
+		// has to be implemented here because of the template I think
+		template <class T> T *getResource(const std::string &filename)
 		{
 			if (resourceList.find(filename) != resourceList.end()) // check the resource does not already exist
 			{
@@ -34,23 +34,8 @@ class resourcemanager
 			resourceList[filename] = newT; // add to resourceList
 			return newT; // return the new one
 		}
-		void deleteResource(std::string filename)
-		{
-            std::cout << "deleting resource: " << filename << std::endl;
-            delete resourceList.find(filename)->second; // delete the object
-            resourceList.erase(filename); // remove it from the list
-		}
-		void clearResources()
-		{
-			std::cout << "deleting resources" << std::endl;
-			for (std::map<std::string, resource *>::iterator resourceList_iter = resourceList.begin(); resourceList_iter != resourceList.end(); ++resourceList_iter)
-			{
-				// loop through the list
-				std::cout << "deleting: " << resourceList_iter->first << std::endl;
-				delete resourceList_iter->second; // delete the object
-			}
-			resourceList.clear(); // clear the list
-		}
+		void deleteResource(std::string filename);
+		void clearResources();
 	protected:
 	private:
 		resourcemanager() {}
