@@ -9,7 +9,7 @@
 #include "md2.hpp"
 #include "resourcemanager.hpp"
 
-void render(); // Render the screen
+void render(game *theGame); // Render the screen
 
 int main(int argc, char *argv[])
 {
@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
 
 		// SDL event handler
 		SDL_Event event;
+
+		theGame.getCurrentMap()->generateMap();
 
 		while (running)
 		{
@@ -52,7 +54,7 @@ int main(int argc, char *argv[])
 				}
 			}
 
-			render();
+			render(&theGame);
 
 			theGame.swapWindow();
 		}
@@ -61,7 +63,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-void render()
+void render(game *theGame)
 {
 	// reset modelview matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -70,7 +72,9 @@ void render()
 	// Clear screen before rendering next frame
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-	md2 *testModel = resourcemanager::getResourceManager()->getResource<md2>("./asset/model/sphere_test.md2");
+	// TODO (sean): some kind of actual camera system
+	glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
+	glTranslatef(-25.0f, -50.0f, -75.0f);
 
-	testModel->renderFrame(0);
+	theGame->getCurrentMap()->renderMap();
 }

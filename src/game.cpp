@@ -6,6 +6,7 @@ game::game()
 {
 	window = NULL;
 	context = NULL;
+	currentMap = new gamemap;
 }
 
 bool game::init()
@@ -120,6 +121,7 @@ game::~game()
 
 	// delete all resources
 	resourcemanager::getResourceManager()->clearResources();
+	delete currentMap;
 
 	//Quit SDL subsystems
 	SDL_Quit();

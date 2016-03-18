@@ -83,7 +83,7 @@ class md2: public resource
 		virtual ~md2();
 
 		void load(const std::string &filename);
-		void renderFrame(int frame);
+		void renderFrame(int frame, vec3 pos);
 		void setScale(float scale) {this->scale = scale;}
 
 		std::string getFilename() {return this->filename;}

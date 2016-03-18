@@ -237,7 +237,7 @@ void md2::load(const std::string &filename)
 	file.close();
 }
 
-void md2::renderFrame(int frame)
+void md2::renderFrame(int frame, vec3 pos)
 {
 	// TODO (sean): Use Vertex Arrays for drawing instead of old glBegin/glEnd
 
@@ -259,13 +259,12 @@ void md2::renderFrame(int frame)
 	GLuint textureID;
 
 	// TODO (sean): Remove translate, it's just for testing
-	glTranslatef(0.0f, -0.2f, -5.0f);
+	//glTranslatef(0.0f, -0.2f, -5.0f);
+	glTranslatef(pos[0], pos[1], pos[2]);
 
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos); // set light position
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseColour); // set light colours
 	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientColour);
-
-	glRotatef(0.05f * SDL_GetTicks(), 0.0f, 1.0f, 0.0f);
 
 	resourcemanager::getResourceManager()->getResource<texture>("./asset/texture/player_test.png")->bindTex();
 

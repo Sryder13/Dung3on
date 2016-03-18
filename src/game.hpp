@@ -6,6 +6,7 @@
 #include<SDL_opengl.h>
 
 #include "resourcemanager.hpp"
+#include "gamemap.hpp"
 
 // TODO (sean): Create settings to change screen resolution instead of defines
 #define SCREEN_WIDTH 640
@@ -20,10 +21,12 @@ class game
 		bool init(); // initialise window etc.
 		bool initGL(); // initialise GL
 		void swapWindow() {SDL_GL_SwapWindow(window);}
+		gamemap *getCurrentMap() {return currentMap;}
     protected:
     private:
 		SDL_Window *window; // Window we render to
 		SDL_GLContext context; // OpenGL context
+		gamemap *currentMap;
 };
 
 #endif // GAME_H
