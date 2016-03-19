@@ -74,7 +74,7 @@ void render(game *theGame)
 
 	// TODO (sean): some kind of actual camera system
 	glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
-	glTranslatef(-25.0f, -50.0f, -75.0f);
+	glTranslatef(-32.0f, -50.0f, -85.0f);
 
 	theGame->getCurrentMap()->renderMap();
 }

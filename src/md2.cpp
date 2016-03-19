@@ -187,14 +187,26 @@ void md2::load(const std::string &filename)
 {
 	std::ifstream file(filename.c_str(), std::ios::binary);
 
+	if (file.fail())
+	{
+		std::cout << "ERROR: Could not open file: " << filename << std::endl;
+		throw std::runtime_error("Error opening MD2 file.");
+	}
+
 	// Read header
 	file.read((char *)&header, sizeof (md2_header)); // read the contents of the header into the header variable
 
 	if (header.ident != md2Ident)
+	{
 		std::cout << "WARNING: Bad MD2 ident for file: " << filename << std::endl;
+		throw std::runtime_error("Error opening MD2 file.");
+	}
 
 	if (header.version != md2Version)
+	{
 		std::cout << "WARNING: Bad MD2 version for file: " << filename << std::endl;
+		throw std::runtime_error("Error opening MD2 file.");
+	}
 
 	skins = new md2_skin[header.num_skins];
 	texCoords = new md2_texCoord[header.num_texCoords];
@@ -237,7 +249,7 @@ void md2::load(const std::string &filename)
 	file.close();
 }
 
-void md2::renderFrame(int frame, vec3 pos)
+void md2::renderFrame(int frame, vec3 position, float rotation)
 {
 	// TODO (sean): Use Vertex Arrays for drawing instead of old glBegin/glEnd
 
@@ -258,9 +270,8 @@ void md2::renderFrame(int frame, vec3 pos)
 	GLfloat ambientColour[] = {1.0f, 1.0f, 1.0f, 1.0f}; // ambient light colour
 	GLuint textureID;
 
-	// TODO (sean): Remove translate, it's just for testing
-	//glTranslatef(0.0f, -0.2f, -5.0f);
-	glTranslatef(pos[0], pos[1], pos[2]);
+	glTranslatef(position[0], position[1], position[2]);
+	glRotatef(rotation, 0.0f, 1.0f, 0.0f);
 
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos); // set light position
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseColour); // set light colours
