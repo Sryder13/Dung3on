@@ -48,6 +48,10 @@ int main(int argc, char *argv[])
 						case SDLK_ESCAPE:
 							running = false;
 							break;
+						case SDLK_RETURN:
+						case SDLK_RETURN2:
+							theGame.getCurrentMap()->generateMap();
+							break;
 						default:
 							break;
 					}

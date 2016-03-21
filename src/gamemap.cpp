@@ -14,21 +14,58 @@ void tile::setTileModel(const std::string &filename)
 
 void gamemap::generateMap()
 {
+	// Clear the map
     for (int x = 0; x < MAP_X_SIZE; x++)
     {
 		for (int y = 0; y < MAP_Y_SIZE; y++)
 		{
 			tiles[x][y].setTileType(TILE_WALL);
+			tiles[x][y].setRotation(0.0f);
 		}
     }
-    for (int x = 8; x < MAP_X_SIZE-8; x++)
+
+    // place rooms
+    std::list<room> roomsList;
+
+    for (int i = 0; i < ROOMS_MAX; i++)
     {
-		for (int y = 8; y < MAP_Y_SIZE-8; y++)
+        int w = ROOM_MIN_X + rand() % (ROOM_MAX_X - ROOM_MIN_X + 1);
+        int h = ROOM_MIN_Y + rand() % (ROOM_MAX_Y - ROOM_MIN_Y + 1);
+        int x = rand() % (MAP_X_SIZE - w - 16) + 8;
+        int y = rand() % (MAP_Y_SIZE - h - 16) + 8;
+
+        room newRoom = room(x, y, w, h);
+
+        int failed = false;
+
+        for (std::list<room>::iterator roomsList_iter = roomsList.begin(); roomsList_iter != roomsList.end(); roomsList_iter++)
+        {
+			if (newRoom.intersects(&(*roomsList_iter)))
+			{
+				failed = true;
+				break;
+			}
+        }
+        if (!failed)
 		{
-			tiles[x][y].setTileType(TILE_FLOOR);
+			roomsList.push_back(newRoom);
+
+			addRoom(newRoom.getX(), newRoom.getY(), newRoom.getW(), newRoom.getH());
 		}
     }
+
     setTilesModels();
+}
+
+void gamemap::addRoom(int x, int y, int w, int h)
+{
+	for (int i = x; i < x + w; i++)
+	{
+		for (int j = y; j < y + h; j++)
+		{
+			tiles[i][j].setTileType(TILE_FLOOR);
+		}
+	}
 }
 
 bool gamemap::dirIsType(directions direction, tile_types tileType, int x, int y)
