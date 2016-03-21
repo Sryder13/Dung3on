@@ -230,8 +230,8 @@ void md2::load(const std::string &filename)
 
 	// Read frames
 	file.seekg(header.offset_frames, std::ios::beg);
-    for (int i = 0; i < header.num_frames; i++)
-    {
+	for (int i = 0; i < header.num_frames; i++)
+	{
 		// Allocate space for frame's vertices
 		frames[i].vertices = new md2_vertex[header.num_vertices];
 
@@ -240,7 +240,7 @@ void md2::load(const std::string &filename)
 		file.read(reinterpret_cast<char *>(frames[i].translate), sizeof(vec3));
 		file.read(reinterpret_cast<char *>(frames[i].name), sizeof(char) * 16); // 16 characters in frame name
 		file.read(reinterpret_cast<char *>(frames[i].vertices), sizeof(md2_vertex) * header.num_vertices);
-    }
+	}
 
 	// Read GL commands
 	file.seekg(header.offset_glcmds, std::ios::beg);
@@ -260,7 +260,7 @@ void md2::renderFrame(int frame, vec3 position, float rotation, const std::strin
 	glPushAttrib(GL_POLYGON_BIT);
 	glFrontFace(GL_CW);
 
-    if (frame < 0 || frame > header.num_frames)
+	if (frame < 0 || frame > header.num_frames)
 		return;
 
 	int i;
@@ -279,8 +279,8 @@ void md2::renderFrame(int frame, vec3 position, float rotation, const std::strin
 
 	resourcemanager::getResourceManager()->getResource<texture>(texName)->bindTex();
 
-    while ((i = *(pGlcmds++)) != 0)
-    {
+	while ((i = *(pGlcmds++)) != 0)
+	{
 		if (i < 0)
 		{
 			glBegin(GL_TRIANGLE_FAN);
@@ -315,10 +315,10 @@ void md2::renderFrame(int frame, vec3 position, float rotation, const std::strin
 			glVertex3fv(vertex);
 		}
 		glEnd();
-    }
+	}
 
-    glPopAttrib(); // GL_POLYGON_BIT
-    glPopMatrix();
+	glPopAttrib(); // GL_POLYGON_BIT
+	glPopMatrix();
 }
 
 md2::~md2()

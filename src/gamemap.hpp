@@ -57,7 +57,7 @@ class room
 		room(int x, int y, int w, int h) {this->x = x; this->y = y; this->w = w; this->h = h;}
 		bool intersects(const room *room2)
 		{
-            if (this->x <= room2->x + room2->w && this->x + this->w >= room2->x
+			if (this->x <= room2->x + room2->w && this->x + this->w >= room2->x
 				&& this->y <= room2->y + room2->h && this->y + this->h >= room2->y)
 				return true;
 			else

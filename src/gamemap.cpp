@@ -15,14 +15,14 @@ void tile::setTileModel(const std::string &filename)
 void gamemap::generateMap()
 {
 	// Clear the map
-    for (int x = 0; x < MAP_X_SIZE; x++)
-    {
+	for (int x = 0; x < MAP_X_SIZE; x++)
+	{
 		for (int y = 0; y < MAP_Y_SIZE; y++)
 		{
 			tiles[x][y].setTileType(TILE_WALL);
 			tiles[x][y].setRotation(0.0f);
 		}
-    }
+	}
 
 	// place rooms
 	std::list<room> roomsList;
@@ -115,9 +115,9 @@ void gamemap::generateMap()
 			}
 		}
 
-    }
+	}
 
-    setTilesModels();
+	setTilesModels();
 }
 
 void gamemap::addRoom(int x, int y, int w, int h)
@@ -255,8 +255,8 @@ std::string gamemap::floorTileModels(int x, int y)
 void gamemap::setTilesModels()
 {
 	std::string modelFile;
-    for (int x = 0; x < MAP_X_SIZE; x++)
-    {
+	for (int x = 0; x < MAP_X_SIZE; x++)
+	{
 		for (int y = 0; y < MAP_Y_SIZE; y++)
 		{
 			switch (tiles[x][y].getTileType())
@@ -277,7 +277,7 @@ void gamemap::setTilesModels()
 			}
 			tiles[x][y].setTileModel(modelFile);
 		}
-    }
+	}
 }
 
 void gamemap::renderMap()

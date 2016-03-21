@@ -14,7 +14,7 @@
 
 class game
 {
-    public:
+	public:
 		game();
 		virtual ~game();
 
@@ -22,8 +22,8 @@ class game
 		bool initGL(); // initialise GL
 		void swapWindow() {SDL_GL_SwapWindow(window);}
 		gamemap *getCurrentMap() {return currentMap;}
-    protected:
-    private:
+	protected:
+	private:
 		SDL_Window *window; // Window we render to
 		SDL_GLContext context; // OpenGL context
 		gamemap *currentMap;
