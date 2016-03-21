@@ -86,6 +86,8 @@ class gamemap
 		std::string floorTileModels(int x, int y);
 		void setTilesModels();
 		void addRoom(int x, int y, int w, int h);
+		void addHCorridor(int y, int x1, int x2);
+		void addVCorridor(int x, int y1, int y2);
 
 		tile tiles[MAP_X_SIZE][MAP_Y_SIZE];
 };

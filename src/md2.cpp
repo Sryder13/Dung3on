@@ -249,7 +249,7 @@ void md2::load(const std::string &filename)
 	file.close();
 }
 
-void md2::renderFrame(int frame, vec3 position, float rotation)
+void md2::renderFrame(int frame, vec3 position, float rotation, const std::string &texName)
 {
 	// TODO (sean): Use Vertex Arrays for drawing instead of old glBegin/glEnd
 
@@ -277,7 +277,7 @@ void md2::renderFrame(int frame, vec3 position, float rotation)
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseColour); // set light colours
 	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientColour);
 
-	resourcemanager::getResourceManager()->getResource<texture>("./asset/texture/player_test.png")->bindTex();
+	resourcemanager::getResourceManager()->getResource<texture>(texName)->bindTex();
 
     while ((i = *(pGlcmds++)) != 0)
     {

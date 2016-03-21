@@ -24,34 +24,97 @@ void gamemap::generateMap()
 		}
     }
 
-    // place rooms
-    std::list<room> roomsList;
+	// place rooms
+	std::list<room> roomsList;
 
-    for (int i = 0; i < ROOMS_MAX; i++)
-    {
-        int w = ROOM_MIN_X + rand() % (ROOM_MAX_X - ROOM_MIN_X + 1);
-        int h = ROOM_MIN_Y + rand() % (ROOM_MAX_Y - ROOM_MIN_Y + 1);
-        int x = rand() % (MAP_X_SIZE - w - 16) + 8;
-        int y = rand() % (MAP_Y_SIZE - h - 16) + 8;
+	for (int i = 0; i < ROOMS_MAX; i++)
+	{
+		int w = ROOM_MIN_X + rand() % (ROOM_MAX_X - ROOM_MIN_X + 1);
+		int h = ROOM_MIN_Y + rand() % (ROOM_MAX_Y - ROOM_MIN_Y + 1);
+		int x = rand() % (MAP_X_SIZE - w - 16) + 8;
+		int y = rand() % (MAP_Y_SIZE - h - 16) + 8;
 
-        room newRoom = room(x, y, w, h);
+		room newRoom = room(x, y, w, h);
 
-        int failed = false;
+		int failed = false;
 
-        for (std::list<room>::iterator roomsList_iter = roomsList.begin(); roomsList_iter != roomsList.end(); roomsList_iter++)
-        {
+		for (std::list<room>::iterator roomsList_iter = roomsList.begin(); roomsList_iter != roomsList.end(); roomsList_iter++)
+		{
 			if (newRoom.intersects(&(*roomsList_iter)))
 			{
 				failed = true;
 				break;
 			}
-        }
-        if (!failed)
+		}
+		if (!failed)
 		{
+			room *prevRoom = NULL;
+
+			if (!roomsList.empty() && roomsList.end() != roomsList.begin())
+			{
+				prevRoom = &(*(--roomsList.end()));
+			}
 			roomsList.push_back(newRoom);
 
 			addRoom(newRoom.getX(), newRoom.getY(), newRoom.getW(), newRoom.getH());
+
+			if (prevRoom)
+			{
+				if (rand() % 2) // carve out horizontally first
+				{
+					int y1 = (rand() % prevRoom->getH()) + prevRoom->getY();
+					int y2;
+					int x1;
+					int x2 = (rand() % newRoom.getW()) + newRoom.getX();
+					if (prevRoom->getX() > newRoom.getX())
+					{
+						x1 = prevRoom->getX();
+					}
+					else
+					{
+						x1 = prevRoom->getX() + prevRoom->getW() - 1;
+					}
+					if (prevRoom->getY() > newRoom.getY())
+					{
+						y2 = newRoom.getY() + newRoom.getH() - 1;
+					}
+					else
+					{
+						y2 = newRoom.getY();
+					}
+
+					addHCorridor(y1, x1, x2);
+					addVCorridor(x2, y1, y2);
+				}
+				else
+				{
+					int x1 = (rand() % prevRoom->getW()) + prevRoom->getX();
+					int y1;
+					int x2;
+					int y2 = (rand() % newRoom.getH()) + newRoom.getY();
+					if (prevRoom->getX() > newRoom.getX())
+					{
+						x2 = newRoom.getX();
+					}
+					else
+					{
+						x2 = newRoom.getX() + newRoom.getW() - 1;
+					}
+					if (prevRoom->getY() > newRoom.getY())
+					{
+						y1 = prevRoom->getY() + prevRoom->getH() - 1;
+					}
+					else
+					{
+						y1 = prevRoom->getY();
+					}
+
+					addVCorridor(x1, y1, y2);
+					addHCorridor(y2, x1, x2);
+				}
+			}
 		}
+
     }
 
     setTilesModels();
@@ -65,6 +128,34 @@ void gamemap::addRoom(int x, int y, int w, int h)
 		{
 			tiles[i][j].setTileType(TILE_FLOOR);
 		}
+	}
+}
+
+void gamemap::addHCorridor(int y, int x1, int x2)
+{
+	if (x2 < x1) // just swap them
+	{
+		int temp = x1-1;
+		x1 = x2;
+		x2 = temp;
+	}
+	for (int i = x1; i <= x2; i++)
+	{
+		tiles[i][y].setTileType(TILE_FLOOR);
+	}
+}
+
+void gamemap::addVCorridor(int x, int y1, int y2)
+{
+	if (y2 < y1) // just swap them
+	{
+		int temp = y1-1;
+		y1 = y2;
+		y2 = temp;
+	}
+	for (int i = y1; i <= y2; i++)
+	{
+		tiles[x][i].setTileType(TILE_FLOOR);
 	}
 }
 
@@ -196,7 +287,10 @@ void gamemap::renderMap()
 		for (int y = 0; y < MAP_Y_SIZE; y++)
 		{
 			vec3 position = {x, 0.0f, y};
-			tiles[x][y].getTileModel()->renderFrame(0, position, tiles[x][y].getRotation());
+			std::string texname = "./asset/texture/player_test.png";
+			if (tiles[x][y].getTileType() == TILE_FLOOR)
+				texname = "./asset/texture/tile_test.png";
+			tiles[x][y].getTileModel()->renderFrame(0, position, tiles[x][y].getRotation(), texname);
 		}
 	}
 }
