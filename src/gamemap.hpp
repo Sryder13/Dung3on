@@ -79,6 +79,7 @@ class gamemap
 		bool tileIsType(tile_types tileType, int x, int y);
 		bool dirIsType(directions direction, tile_types tileType, int x, int y);
 		virtual ~gamemap();
+		entity *getFirstEntity() {return *(entityList.begin());}
 	protected:
 	private:
 		std::string floorTileModels(int x, int y);

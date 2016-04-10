@@ -4,6 +4,7 @@
 #include<SDL.h>
 #include<GL/glew.h>
 #include<SDL_opengl.h>
+#include<cmath>
 
 #include "resourcemanager.hpp"
 #include "gamemap.hpp"

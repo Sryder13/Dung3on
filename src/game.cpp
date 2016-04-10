@@ -127,8 +127,16 @@ void game::render()
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	// TODO (sean): some kind of actual camera system
-	glRotatef(25.0f, 1.0f, 0.0f, 0.0f);
-	glTranslatef(-32.0f, -32.0f, -85.0f);
+	GLdouble CamX, CamY, CamZ;
+
+	entity *followMe = getCurrentMap()->getFirstEntity();
+
+	CamX = followMe->getX();
+	CamY = 0.0f + cos(45.0f)*15.0f;
+	CamZ = followMe->getY() + cos(45.0f)*15.0f;
+	gluLookAt(CamX, CamY, CamZ, followMe->getX(), 0.0f, followMe->getY(), 0, 1, 0);
+	//glRotatef(55.0f, 1.0f, 0.0f, 0.0f);
+	//glTranslatef(-32.0f, -32.0f, -85.0f);
 
 	getCurrentMap()->renderMap();
 }
