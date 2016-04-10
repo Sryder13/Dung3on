@@ -3,7 +3,7 @@
 
 #include<iostream>
 #include<cstdlib>
-#include<list>
+#include<vector>
 
 #include "md2.hpp"
 

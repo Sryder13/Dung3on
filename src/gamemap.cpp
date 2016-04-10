@@ -25,7 +25,8 @@ void gamemap::generateMap()
 	}
 
 	// place rooms
-	std::list<room> roomsList;
+	std::vector<room> roomsVector;
+	int numRooms = 0;
 
 	for (int i = 0; i < ROOMS_MAX; i++)
 	{
@@ -38,7 +39,7 @@ void gamemap::generateMap()
 
 		int failed = false;
 
-		for (std::list<room>::iterator roomsList_iter = roomsList.begin(); roomsList_iter != roomsList.end(); roomsList_iter++)
+		for (std::vector<room>::iterator roomsList_iter = roomsVector.begin(); roomsList_iter != roomsVector.end(); roomsList_iter++)
 		{
 			if (newRoom.intersects(&(*roomsList_iter)))
 			{
@@ -50,13 +51,14 @@ void gamemap::generateMap()
 		{
 			room *prevRoom = NULL;
 
-			if (!roomsList.empty() && roomsList.end() != roomsList.begin())
+			roomsVector.push_back(newRoom);
+			if (roomsVector.size() > 1)
 			{
-				prevRoom = &(*(--roomsList.end()));
+				prevRoom = (&roomsVector.end()[-2]);
 			}
-			roomsList.push_back(newRoom);
 
 			addRoom(newRoom.getX(), newRoom.getY(), newRoom.getW(), newRoom.getH());
+			numRooms++;
 
 			if (prevRoom)
 			{
@@ -116,6 +118,12 @@ void gamemap::generateMap()
 		}
 
 	}
+
+	// Place the stairs in a random room
+	int randRoom = rand() % numRooms;
+	int stairx = (rand() % (roomsVector[randRoom].getW()-2)) + roomsVector[randRoom].getX() + 1; // never next to walls
+	int stairy = (rand() % (roomsVector[randRoom].getH()-2)) + roomsVector[randRoom].getY() + 1;
+	tiles[stairx][stairy].setTileType(TILE_STAIRS);
 
 	setTilesModels();
 }
@@ -270,6 +278,7 @@ void gamemap::setTilesModels()
 					break;
 				case TILE_STAIRS:
 					modelFile = "./asset/model/tile_stairs.md2";
+					tiles[x][y].setRotation(90.0f);
 					break;
 				default:
 					std::cout << "gamemap::setTilesModels(): Unknown tile type on tile: X = " << x << ": Y = " << y << std::endl;
