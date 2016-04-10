@@ -4,8 +4,10 @@
 #include<iostream>
 #include<cstdlib>
 #include<vector>
+#include<list>
 
 #include "md2.hpp"
+#include "entity.hpp"
 
 #define MAP_X_SIZE 64
 #define MAP_Y_SIZE 64
@@ -24,14 +26,6 @@ enum tile_types
 	TILE_STAIRS,
 };
 
-enum directions
-{
-	DIR_NORTH,
-	DIR_EAST,
-	DIR_SOUTH,
-	DIR_WEST,
-};
-
 class tile
 {
 	public:
@@ -41,7 +35,7 @@ class tile
 		md2 *getTileModel() {return model;}
 		void setTileModel(const std::string &filename);
 		float getRotation() {return rotation;}
-		float setRotation(float rotation) {this->rotation = rotation;}
+		void setRotation(float rotation) {this->rotation = rotation;}
 	protected:
 	private:
 		tile_types tileType;
@@ -90,6 +84,7 @@ class gamemap
 		void addVCorridor(int x, int y1, int y2);
 
 		tile tiles[MAP_X_SIZE][MAP_Y_SIZE];
+		std::list<entity> entityList;
 };
 
 #endif // GAMEMAP_H

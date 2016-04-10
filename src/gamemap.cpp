@@ -21,6 +21,7 @@ void gamemap::generateMap()
 		{
 			tiles[x][y].setTileType(TILE_WALL);
 			tiles[x][y].setRotation(0.0f);
+			entityList.clear();
 		}
 	}
 
@@ -39,9 +40,9 @@ void gamemap::generateMap()
 
 		int failed = false;
 
-		for (std::vector<room>::iterator roomsList_iter = roomsVector.begin(); roomsList_iter != roomsVector.end(); roomsList_iter++)
+		for (std::vector<room>::iterator roomsVector_iter = roomsVector.begin(); roomsVector_iter != roomsVector.end(); roomsVector_iter++)
 		{
-			if (newRoom.intersects(&(*roomsList_iter)))
+			if (newRoom.intersects(&(*roomsVector_iter)))
 			{
 				failed = true;
 				break;
@@ -121,11 +122,18 @@ void gamemap::generateMap()
 
 	// Place the stairs in a random room
 	int randRoom = rand() % numRooms;
-	int stairx = (rand() % (roomsVector[randRoom].getW()-2)) + roomsVector[randRoom].getX() + 1; // never next to walls
-	int stairy = (rand() % (roomsVector[randRoom].getH()-2)) + roomsVector[randRoom].getY() + 1;
-	tiles[stairx][stairy].setTileType(TILE_STAIRS);
+	int randRoomx = (rand() % (roomsVector[randRoom].getW()-2)) + roomsVector[randRoom].getX() + 1; // never next to walls
+	int randRoomy = (rand() % (roomsVector[randRoom].getH()-2)) + roomsVector[randRoom].getY() + 1;
+	tiles[randRoomx][randRoomy].setTileType(TILE_STAIRS);
 
 	setTilesModels();
+
+	// Add entities to the map
+	randRoom = rand() % numRooms;
+	randRoomx = (rand() % roomsVector[randRoom].getW()) + roomsVector[randRoom].getX();
+	randRoomy = (rand() % roomsVector[randRoom].getH()) + roomsVector[randRoom].getY();
+	player newPlay(randRoomx, randRoomy, "./asset/model/player_test.md2", this);
+    entityList.push_back(newPlay);
 }
 
 void gamemap::addRoom(int x, int y, int w, int h)
@@ -301,5 +309,10 @@ void gamemap::renderMap()
 				texname = "./asset/texture/tile_test.png";
 			tiles[x][y].getTileModel()->renderFrame(0, position, tiles[x][y].getRotation(), texname);
 		}
+	}
+
+	for (std::list<entity>::iterator entityList_iter = entityList.begin(); entityList_iter != entityList.end(); entityList_iter++)
+	{
+		(*entityList_iter).renderEntity();
 	}
 }

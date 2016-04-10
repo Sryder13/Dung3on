@@ -28,6 +28,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="src/entity.cpp" />
+		<Unit filename="src/entity.hpp" />
 		<Unit filename="src/game.cpp" />
 		<Unit filename="src/game.hpp" />
 		<Unit filename="src/gamemap.cpp" />
