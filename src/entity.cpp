@@ -1,4 +1,5 @@
 #include "entity.hpp"
+#include "gamemap.hpp"
 
 float entity::getRotationFromDirection(directions dir)
 {
@@ -35,7 +36,41 @@ void entity::renderEntity()
 	model->renderFrame(0, position, getRotationFromDirection(facing), "./asset/texture/enemy_test.png");
 }
 
-void player::update(gamemap *currentmap)
+void player::update(gamemap *currentmap, controls gameControls)
 {
+	if (gameControls.getPressedButtons() & BUTTON_UP && !(gameControls.getHeldButtons() & BUTTON_UP))
+	{
+		if (!currentmap->dirIsType(DIR_NORTH, TILE_WALL, getX(), getY()))
+		{
+			setY(getY()-1);
+			setFacing(DIR_NORTH);
+		}
+	}
+	else if (gameControls.getPressedButtons() & BUTTON_RIGHT && !(gameControls.getHeldButtons() & BUTTON_RIGHT))
+	{
+		if (!currentmap->dirIsType(DIR_EAST, TILE_WALL, getX(), getY()))
+		{
+			setX(getX()+1);
+			setFacing(DIR_EAST);
+		}
+	}
+	else if (gameControls.getPressedButtons() & BUTTON_DOWN && !(gameControls.getHeldButtons() & BUTTON_DOWN))
+	{
+		if (!currentmap->dirIsType(DIR_SOUTH, TILE_WALL, getX(), getY()))
+		{
+			setY(getY()+1);
+			setFacing(DIR_SOUTH);
+		}
+	}
+	else if (gameControls.getPressedButtons() & BUTTON_LEFT && !(gameControls.getHeldButtons() & BUTTON_LEFT))
+	{
+		if (!currentmap->dirIsType(DIR_WEST, TILE_WALL, getX(), getY()))
+		{
+			setX(getX()-1);
+			setFacing(DIR_WEST);
+		}
+	}
 
+	if (currentmap->tileIsType(TILE_STAIRS, getX(), getY()))
+		currentmap->generateMap();
 }

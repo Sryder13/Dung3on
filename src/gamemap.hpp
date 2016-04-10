@@ -8,6 +8,7 @@
 
 #include "md2.hpp"
 #include "entity.hpp"
+#include "controls.hpp"
 
 #define MAP_X_SIZE 64
 #define MAP_Y_SIZE 64
@@ -74,9 +75,12 @@ class gamemap
 	public:
 		void generateMap();
 		void renderMap();
+		void updateEntities(controls gameControls);
+		bool tileIsType(tile_types tileType, int x, int y);
+		bool dirIsType(directions direction, tile_types tileType, int x, int y);
+		virtual ~gamemap();
 	protected:
 	private:
-		bool dirIsType(directions direction, tile_types tileType, int x, int y);
 		std::string floorTileModels(int x, int y);
 		void setTilesModels();
 		void addRoom(int x, int y, int w, int h);
@@ -84,7 +88,7 @@ class gamemap
 		void addVCorridor(int x, int y1, int y2);
 
 		tile tiles[MAP_X_SIZE][MAP_Y_SIZE];
-		std::list<entity> entityList;
+		std::list<entity*> entityList;
 };
 
 #endif // GAMEMAP_H

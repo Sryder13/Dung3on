@@ -7,6 +7,7 @@
 
 #include "resourcemanager.hpp"
 #include "gamemap.hpp"
+#include "controls.hpp"
 
 // TODO (sean): Create settings to change screen resolution instead of defines
 #define SCREEN_WIDTH 640
@@ -21,6 +22,9 @@ class game
 		bool init(); // initialise window etc.
 		bool initGL(); // initialise GL
 		void swapWindow() {SDL_GL_SwapWindow(window);}
+		void update(controls gameControls);
+		void render();
+
 		gamemap *getCurrentMap() {return currentMap;}
 	protected:
 	private:

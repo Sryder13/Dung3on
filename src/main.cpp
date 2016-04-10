@@ -9,6 +9,9 @@
 #include "md2.hpp"
 #include "resourcemanager.hpp"
 
+#define FRAMERATE 60
+
+void update(game *theGame); // Update the game logic
 void render(game *theGame); // Render the screen
 
 int main(int argc, char *argv[])
@@ -29,55 +32,84 @@ int main(int argc, char *argv[])
 		// SDL event handler
 		SDL_Event event;
 
+		controls gameControls;
+
 		theGame.getCurrentMap()->generateMap();
+
+		Uint32 lastFrameTick = SDL_GetTicks();
 
 		while (running)
 		{
-			// Poll events from SDL
-			while (SDL_PollEvent(&event) != 0)
+			Uint32 currentTick = SDL_GetTicks();
+			if (lastFrameTick - currentTick > 1000/FRAMERATE)
 			{
-				//User requests quit
-				if (event.type == SDL_QUIT)
+				lastFrameTick = currentTick;
+				// Poll events from SDL
+				while (SDL_PollEvent(&event) != 0)
 				{
-					running = false;
-				}
-				else if (event.type == SDL_KEYDOWN)
-				{
-					switch(event.key.keysym.sym)
+					//User requests quit
+					if (event.type == SDL_QUIT)
 					{
-						case SDLK_ESCAPE:
-							running = false;
-							break;
-						case SDLK_RETURN:
-						case SDLK_RETURN2:
-							theGame.getCurrentMap()->generateMap();
-							break;
-						default:
-							break;
+						running = false;
+					}
+					else if (event.type == SDL_KEYDOWN)
+					{
+						switch(event.key.keysym.sym)
+						{
+							case SDLK_UP:
+								gameControls.pressButton(BUTTON_UP);
+								break;
+							case SDLK_RIGHT:
+								gameControls.pressButton(BUTTON_RIGHT);
+								break;
+							case SDLK_LEFT:
+								gameControls.pressButton(BUTTON_LEFT);
+								break;
+							case SDLK_DOWN:
+								gameControls.pressButton(BUTTON_DOWN);
+								break;
+							case SDLK_ESCAPE:
+								running = false;
+								break;
+							case SDLK_RETURN:
+							case SDLK_RETURN2:
+								theGame.getCurrentMap()->generateMap();
+								break;
+							default:
+								break;
+						}
+					}
+					else if (event.type == SDL_KEYUP)
+					{
+						switch(event.key.keysym.sym)
+						{
+							case SDLK_UP:
+								gameControls.unpressButton(BUTTON_UP);
+								break;
+							case SDLK_RIGHT:
+								gameControls.unpressButton(BUTTON_RIGHT);
+								break;
+							case SDLK_LEFT:
+								gameControls.unpressButton(BUTTON_LEFT);
+								break;
+							case SDLK_DOWN:
+								gameControls.unpressButton(BUTTON_DOWN);
+								break;
+							default:
+								break;
+						}
 					}
 				}
-			}
-			render(&theGame);
+				theGame.update(gameControls);
 
-			theGame.swapWindow();
+				gameControls.updateheldButtons();
+
+				theGame.render();
+
+				theGame.swapWindow();
+			}
 		}
 	}
 
 	return 0;
-}
-
-void render(game *theGame)
-{
-	// reset modelview matrix
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	// Clear screen before rendering next frame
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
-	// TODO (sean): some kind of actual camera system
-	glRotatef(25.0f, 1.0f, 0.0f, 0.0f);
-	glTranslatef(-32.0f, -32.0f, -85.0f);
-
-	theGame->getCurrentMap()->renderMap();
 }

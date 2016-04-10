@@ -112,6 +112,27 @@ bool game::initGL()
 	return true;
 }
 
+void game::update(controls gameControls)
+{
+	getCurrentMap()->updateEntities(gameControls);
+}
+
+void game::render()
+{
+	// reset modelview matrix
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	// Clear screen before rendering next frame
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+	// TODO (sean): some kind of actual camera system
+	glRotatef(25.0f, 1.0f, 0.0f, 0.0f);
+	glTranslatef(-32.0f, -32.0f, -85.0f);
+
+	getCurrentMap()->renderMap();
+}
+
 game::~game()
 {
 	//Destroy window

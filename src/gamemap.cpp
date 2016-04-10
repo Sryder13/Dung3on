@@ -132,7 +132,7 @@ void gamemap::generateMap()
 	randRoom = rand() % numRooms;
 	randRoomx = (rand() % roomsVector[randRoom].getW()) + roomsVector[randRoom].getX();
 	randRoomy = (rand() % roomsVector[randRoom].getH()) + roomsVector[randRoom].getY();
-	player newPlay(randRoomx, randRoomy, "./asset/model/player_test.md2", this);
+	player *newPlay = new player(randRoomx, randRoomy, "./asset/model/player_test.md2", this);
     entityList.push_back(newPlay);
 }
 
@@ -175,18 +175,23 @@ void gamemap::addVCorridor(int x, int y1, int y2)
 	}
 }
 
+bool gamemap::tileIsType(tile_types tileType, int x, int y)
+{
+	return tiles[x][y].getTileType() == tileType;
+}
+
 bool gamemap::dirIsType(directions direction, tile_types tileType, int x, int y)
 {
 	switch (direction)
 	{
 		case DIR_NORTH:
-			return (tileType == TILE_WALL && y == 0) || tiles[x][y-1].getTileType() == tileType;
+			return tileIsType(tileType, x, y-1);
 		case DIR_EAST:
-			return (tileType == TILE_WALL && x == MAP_X_SIZE-1) || tiles[x+1][y].getTileType() == tileType;
+			return tileIsType(tileType, x+1, y);
 		case DIR_SOUTH:
-			return (tileType == TILE_WALL && y == MAP_Y_SIZE-1) || tiles[x][y+1].getTileType() == tileType;
+			return tileIsType(tileType, x, y+1);
 		case DIR_WEST:
-			return (tileType == TILE_WALL && x == 0) || tiles[x-1][y].getTileType() == tileType;
+			return tileIsType(tileType, x-1, y);
 		default:
 			break;
 	}
@@ -311,8 +316,25 @@ void gamemap::renderMap()
 		}
 	}
 
-	for (std::list<entity>::iterator entityList_iter = entityList.begin(); entityList_iter != entityList.end(); entityList_iter++)
+	for (std::list<entity*>::iterator entityList_iter = entityList.begin(); entityList_iter != entityList.end(); entityList_iter++)
 	{
-		(*entityList_iter).renderEntity();
+		((*entityList_iter))->renderEntity();
+	}
+}
+
+void gamemap::updateEntities(controls gameControls)
+{
+	for (std::list<entity*>::iterator entityList_iter = entityList.begin(); entityList_iter != entityList.end(); entityList_iter++)
+	{
+		(*entityList_iter)->update(this, gameControls);
+	}
+}
+
+gamemap::~gamemap()
+{
+	for (std::list<entity*>::iterator entityList_iter = entityList.begin(); entityList_iter != entityList.end(); entityList_iter++)
+	{
+		// loop through the list
+		delete *(entityList_iter); // delete the object
 	}
 }

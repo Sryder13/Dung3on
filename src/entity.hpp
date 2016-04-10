@@ -4,6 +4,7 @@
 #include<iostream>
 
 #include "md2.hpp"
+#include "controls.hpp"
 
 class gamemap;
 
@@ -29,7 +30,9 @@ class entity
 		directions getFacing() {return this->facing;}
 		void setFacing(directions facing) {this->facing = facing;}
 
-		virtual void update() {}
+		virtual void update(gamemap *currentmap, controls gameControls) {
+
+		}
 		void renderEntity();
 	protected:
 	private:
@@ -42,11 +45,11 @@ class entity
 class player: public entity
 {
 	public:
-	player(int x, int y, const std::string &modelFilename, gamemap *currentmap): entity(x, y, modelFilename, currentmap)
-	{
+		player(int x, int y, const std::string &modelFilename, gamemap *currentmap): entity(x, y, modelFilename, currentmap)
+		{
 
-	}
-	void update(gamemap *currentmap);
+		}
+		void update(gamemap *currentmap, controls gameControls);
 	protected:
 	private:
 };
