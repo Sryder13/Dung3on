@@ -1,6 +1,7 @@
 #ifndef MD2_H
 #define MD2_H
 
+#include<stdexcept>
 #include<GL/glew.h>
 #include<SDL_opengl.h>
 
