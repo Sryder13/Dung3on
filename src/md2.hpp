@@ -3,7 +3,6 @@
 
 #include<stdexcept>
 #include<GL/glew.h>
-#include<SDL_opengl.h>
 
 #include "resourcemanager.hpp"
 #include "texture.hpp"
