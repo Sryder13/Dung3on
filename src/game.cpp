@@ -143,14 +143,16 @@ void game::render()
 
 game::~game()
 {
+	// delete all resources
+	resourcemanager::getResourceManager()->clearResources();
+	delete currentMap;
+
+	// Destroy contexy
+	SDL_GL_DeleteContext(context);
 	//Destroy window
 	SDL_DestroyWindow(window);
 	window = NULL;
 	context = NULL;
-
-	// delete all resources
-	resourcemanager::getResourceManager()->clearResources();
-	delete currentMap;
 
 	//Quit SDL subsystems
 	SDL_Quit();
